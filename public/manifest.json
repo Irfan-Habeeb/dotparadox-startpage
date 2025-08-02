@@ -1,0 +1,16 @@
+{
+  "name": "dotparadox",
+  "short_name": "dotparadox",
+  "description": "Where poetry meets the digital realm",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#3e51b5",
+  "theme_color": "#3c84e3",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
