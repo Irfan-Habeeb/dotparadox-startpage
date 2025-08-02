@@ -16,7 +16,7 @@
 
 @layer components {
   .gradient-bg {
-    background: linear-gradient(-45deg, #3e51b5, #9B51E0, #3e51b5, #9B51E0);
+    background: linear-gradient(-45deg, #3e51b5, #344e80, #9B51E0, #3e51b5);
     background-size: 400% 400%;
     animation: gradient 8s ease infinite;
   }
@@ -38,7 +38,7 @@
   }
   
   .feed-card {
-    @apply p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300 hover:shadow-lg;
+    @apply p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300 hover:shadow-lg;
   }
 }
 
@@ -46,8 +46,14 @@
   0% {
     background-position: 0% 50%;
   }
-  50% {
+  25% {
     background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
   }
   100% {
     background-position: 0% 50%;

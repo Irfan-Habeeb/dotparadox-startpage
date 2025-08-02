@@ -32,7 +32,16 @@ const SearchBar = () => {
     e.preventDefault()
     if (query.trim()) {
       const engine = searchEngines.find(se => se.value === searchEngine)
-      window.open(engine.url + encodeURIComponent(query), '_blank')
+      if (engine) {
+        const searchUrl = engine.url + encodeURIComponent(query.trim())
+        window.open(searchUrl, '_blank')
+      }
+    }
+  }
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch(e)
     }
   }
 
@@ -44,6 +53,7 @@ const SearchBar = () => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
             placeholder="Search the web..."
             className="search-input w-full pl-12 pr-20"
           />
@@ -53,7 +63,7 @@ const SearchBar = () => {
             <select
               value={searchEngine}
               onChange={(e) => setSearchEngine(e.target.value)}
-              className="bg-transparent text-sm text-gray-600 dark:text-gray-400 focus:outline-none"
+              className="bg-transparent text-sm text-gray-600 dark:text-gray-400 focus:outline-none border-none"
             >
               {searchEngines.map(engine => (
                 <option key={engine.value} value={engine.value}>
