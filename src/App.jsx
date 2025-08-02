@@ -26,14 +26,19 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen gradient-bg relative overflow-hidden">
-      {/* Background overlay */}
-      <div className="absolute inset-0 bg-black/5 dark:bg-black/20"></div>
+    <div className="min-h-screen blur-bg relative overflow-hidden">
+      {/* Moving shapes background */}
+      <div className="moving-shapes">
+        <div className="shape"></div>
+        <div className="shape"></div>
+        <div className="shape"></div>
+        <div className="shape"></div>
+      </div>
       
       {/* Dark mode toggle */}
       <button
         onClick={toggleDarkMode}
-        className="fixed top-6 right-6 z-50 p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300 hover:scale-110"
+        className="fixed top-6 right-6 z-50 p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-200 hover:scale-110"
       >
         {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
       </button>
