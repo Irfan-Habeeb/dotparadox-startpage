@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
-import { ExternalLink, Calendar, BookOpen } from 'lucide-react'
+import { ExternalLink, Calendar, BookOpen, Loader2, ArrowRight } from 'lucide-react'
 
 const FeedSection = () => {
   const [feeds, setFeeds] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [displayCount, setDisplayCount] = useState(6)
+  const [allFeeds, setAllFeeds] = useState([])
 
   useEffect(() => {
     const fetchFeeds = async () => {
@@ -12,11 +15,40 @@ const FeedSection = () => {
         const proxyUrl = 'https://api.allorigins.win/raw?url='
         
         const feedUrls = [
-          'https://irfanhabeeb.com/feed/', // Your WordPress blog
+          // News Sources
+          'https://feeds.bbci.co.uk/news/rss.xml',
+          'https://rss.cnn.com/rss/edition.rss',
+          'https://feeds.npr.org/1001/rss.xml',
+          'https://feeds.reuters.com/reuters/topNews',
+          
+          // Tech & Innovation
+          'https://feeds.feedburner.com/TechCrunch/',
+          'https://www.wired.com/feed/rss',
+          'https://feeds.arstechnica.com/arstechnica/index',
+          
+          // Literature & Culture
           'https://www.poetryfoundation.org/rss/poetry.rss',
           'https://theparisreview.org/feed/',
           'https://www.newyorker.com/feed/everything',
-          'https://www.theatlantic.com/feed/all/'
+          'https://www.theatlantic.com/feed/all/',
+          'https://www.lrb.co.uk/rss',
+          
+          // Science & Discovery
+          'https://feeds.nature.com/nature/rss/current',
+          'https://rss.sciencedaily.com/sciencedaily.xml',
+          'https://feeds.feedburner.com/sciencealert-latestnews',
+          
+          // Business & Economy
+          'https://feeds.bloomberg.com/markets/news.rss',
+          'https://feeds.reuters.com/reuters/businessNews',
+          
+          // Arts & Entertainment
+          'https://feeds.feedburner.com/artsjournal',
+          'https://www.artsy.net/rss/news',
+          
+          // Philosophy & Ideas
+          'https://aeon.co/feed.rss',
+          'https://www.brainpickings.org/feed/'
         ]
 
         const feedPromises = feedUrls.map(async (url, index) => {
@@ -32,7 +64,7 @@ const FeedSection = () => {
             const articles = []
             
             items.forEach((item, itemIndex) => {
-              if (itemIndex < 3) { // Get first 3 articles from each feed
+              if (itemIndex < 4) { // Get first 4 articles from each feed
                 const title = item.querySelector('title')?.textContent || 'Untitled'
                 const link = item.querySelector('link')?.textContent || '#'
                 const description = item.querySelector('description')?.textContent || 
@@ -46,11 +78,12 @@ const FeedSection = () => {
                 
                 articles.push({
                   title: title.replace(/<[^>]*>/g, ''), // Remove HTML tags
-                  excerpt: description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+                  excerpt: description.replace(/<[^>]*>/g, '').substring(0, 120) + '...',
                   date: new Date(pubDate).toLocaleDateString(),
                   url: link,
                   image,
-                  source: getSourceName(url)
+                  source: getSourceName(url),
+                  category: getCategory(url)
                 })
               }
             })
@@ -63,38 +96,12 @@ const FeedSection = () => {
         })
 
         const allFeeds = await Promise.all(feedPromises)
-        const flattenedFeeds = allFeeds.flat().slice(0, 12) // Get top 12 articles
-        setFeeds(flattenedFeeds)
+        const flattenedFeeds = allFeeds.flat()
+        setAllFeeds(flattenedFeeds)
+        setFeeds(flattenedFeeds.slice(0, displayCount))
         setLoading(false)
       } catch (error) {
         console.error('Error fetching feeds:', error)
-        // Fallback to sample data
-        setFeeds([
-          {
-            title: "Latest from Irfan Habeeb's Blog",
-            excerpt: "Exploring the intersection of technology and poetry in the digital age...",
-            date: new Date().toLocaleDateString(),
-            url: "https://irfanhabeeb.com/",
-            image: null,
-            source: "irfanhabeeb.com"
-          },
-          {
-            title: "Poetry Foundation - Featured Works",
-            excerpt: "Discover contemporary poetry and literary insights from the Poetry Foundation...",
-            date: new Date().toLocaleDateString(),
-            url: "https://www.poetryfoundation.org/",
-            image: null,
-            source: "poetryfoundation.org"
-          },
-          {
-            title: "The Paris Review - Literary Excellence",
-            excerpt: "Latest essays, poetry, and fiction from The Paris Review...",
-            date: new Date().toLocaleDateString(),
-            url: "https://theparisreview.org/",
-            image: null,
-            source: "theparisreview.org"
-          }
-        ])
         setLoading(false)
       }
     }
@@ -103,12 +110,68 @@ const FeedSection = () => {
   }, [])
 
   const getSourceName = (url) => {
-    if (url.includes('irfanhabeeb.com')) return 'irfanhabeeb.com'
-    if (url.includes('poetryfoundation.org')) return 'poetryfoundation.org'
-    if (url.includes('theparisreview.org')) return 'theparisreview.org'
-    if (url.includes('newyorker.com')) return 'newyorker.com'
-    if (url.includes('theatlantic.com')) return 'theatlantic.com'
+    const sourceMap = {
+      'bbci.co.uk': 'BBC News',
+      'cnn.com': 'CNN',
+      'npr.org': 'NPR',
+      'reuters.com': 'Reuters',
+      'feedburner.com/TechCrunch': 'TechCrunch',
+      'wired.com': 'Wired',
+      'arstechnica.com': 'Ars Technica',
+      'poetryfoundation.org': 'Poetry Foundation',
+      'theparisreview.org': 'The Paris Review',
+      'newyorker.com': 'The New Yorker',
+      'theatlantic.com': 'The Atlantic',
+      'lrb.co.uk': 'London Review of Books',
+      'nature.com': 'Nature',
+      'sciencedaily.com': 'Science Daily',
+      'sciencealert-latestnews': 'Science Alert',
+      'bloomberg.com': 'Bloomberg',
+      'feedburner.com/artsjournal': 'Arts Journal',
+      'artsy.net': 'Artsy',
+      'aeon.co': 'Aeon',
+      'brainpickings.org': 'Brain Pickings'
+    }
+    
+    for (const [key, value] of Object.entries(sourceMap)) {
+      if (url.includes(key)) return value
+    }
     return 'Unknown Source'
+  }
+
+  const getCategory = (url) => {
+    if (url.includes('bbci.co.uk') || url.includes('cnn.com') || url.includes('npr.org') || url.includes('reuters.com')) return 'news'
+    if (url.includes('TechCrunch') || url.includes('wired.com') || url.includes('arstechnica.com')) return 'tech'
+    if (url.includes('poetryfoundation.org') || url.includes('theparisreview.org') || url.includes('newyorker.com') || url.includes('theatlantic.com') || url.includes('lrb.co.uk')) return 'literature'
+    if (url.includes('nature.com') || url.includes('sciencedaily.com') || url.includes('sciencealert')) return 'science'
+    if (url.includes('bloomberg.com')) return 'business'
+    if (url.includes('artsjournal') || url.includes('artsy.net')) return 'arts'
+    if (url.includes('aeon.co') || url.includes('brainpickings.org')) return 'philosophy'
+    return 'general'
+  }
+
+  const getCategoryColor = (category) => {
+    const colors = {
+      news: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
+      tech: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
+      literature: 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400',
+      science: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+      business: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
+      arts: 'bg-pink-100 text-pink-800 dark:bg-pink-900/20 dark:text-pink-400',
+      philosophy: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400',
+      general: 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+    }
+    return colors[category] || colors.general
+  }
+
+  const loadMore = async () => {
+    setLoadingMore(true)
+    // Simulate loading delay
+    await new Promise(resolve => setTimeout(resolve, 500))
+    const newCount = displayCount + 6
+    setDisplayCount(newCount)
+    setFeeds(allFeeds.slice(0, newCount))
+    setLoadingMore(false)
   }
 
   if (loading) {
@@ -139,50 +202,82 @@ const FeedSection = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {feeds.map((feed, index) => (
-          <div key={index} className="feed-card">
+          <div key={index} className="group feed-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             {feed.image && (
-              <div className="relative overflow-hidden rounded-lg mb-4">
+              <div className="relative overflow-hidden rounded-t-xl">
                 <img 
                   src={feed.image} 
                   alt={feed.title}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute top-3 left-3">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(feed.category)}`}>
+                    {feed.category}
+                  </span>
+                </div>
+                <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
                   {feed.source}
                 </div>
               </div>
             )}
-            <div className="space-y-3">
-              <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2">
+            <div className={`p-4 ${!feed.image ? 'pt-4' : ''}`}>
+              <div className="flex items-center gap-2 mb-3">
+                {!feed.image && (
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(feed.category)}`}>
+                    {feed.category}
+                  </span>
+                )}
+                <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
+                  {feed.source}
+                </span>
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-3 group-hover:text-primary transition-colors">
                 {feed.title}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-4">
                 {feed.excerpt}
               </p>
-              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-500">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
                   <Calendar className="w-3 h-3" />
                   <span>{feed.date}</span>
                 </div>
-                {!feed.image && (
-                  <div className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                    {feed.source}
-                  </div>
-                )}
+                <a
+                  href={feed.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 group-hover:gap-2 transition-all"
+                >
+                  <span>Read</span>
+                  <ArrowRight className="w-3 h-3" />
+                </a>
               </div>
-              <a
-                href={feed.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"
-              >
-                <ExternalLink className="w-3 h-3" />
-                Read Article
-              </a>
             </div>
           </div>
         ))}
       </div>
+      
+      {feeds.length < allFeeds.length && (
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={loadMore}
+            disabled={loadingMore}
+            className="btn-primary flex items-center gap-2 px-6 py-3"
+          >
+            {loadingMore ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                Load More Articles
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
