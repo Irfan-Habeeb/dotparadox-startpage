@@ -28,8 +28,7 @@ const SearchBar = () => {
     { name: 'IMDb', value: 'imdb', url: 'https://www.imdb.com/find?q=' }
   ]
 
-  const handleSearch = (e) => {
-    e.preventDefault()
+  const performSearch = () => {
     if (query.trim()) {
       const engine = searchEngines.find(se => se.value === searchEngine)
       if (engine) {
@@ -39,15 +38,21 @@ const SearchBar = () => {
     }
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    performSearch()
+  }
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      handleSearch(e)
+      e.preventDefault()
+      performSearch()
     }
   }
 
   return (
     <div className="max-w-2xl mx-auto animate-slide-up">
-      <form onSubmit={handleSearch} className="relative">
+      <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
           <input
             type="text"

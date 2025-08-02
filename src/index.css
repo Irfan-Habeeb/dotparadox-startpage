@@ -7,16 +7,18 @@
   html {
     font-family: 'Figtree', sans-serif;
     letter-spacing: 0.025em;
+    scroll-behavior: smooth;
   }
   
   body {
     @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300;
+    overflow-x: hidden;
   }
 }
 
 @layer components {
   .gradient-bg {
-    background: linear-gradient(-45deg, #3e51b5, #344e80, #9B51E0, #3e51b5);
+    background: linear-gradient(-45deg, #3e51b5, #344e80, #3c84e3, #3e51b5);
     background-size: 400% 400%;
     animation: gradient 8s ease infinite;
   }
