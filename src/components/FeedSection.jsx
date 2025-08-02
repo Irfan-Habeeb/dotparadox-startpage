@@ -8,6 +8,61 @@ const FeedSection = () => {
   const [displayCount, setDisplayCount] = useState(6)
   const [allFeeds, setAllFeeds] = useState([])
 
+  const getSourceName = (url) => {
+    const sourceMap = {
+      'bbci.co.uk': 'BBC News',
+      'cnn.com': 'CNN',
+      'npr.org': 'NPR',
+      'reuters.com': 'Reuters',
+      'feedburner.com/TechCrunch': 'TechCrunch',
+      'wired.com': 'Wired',
+      'arstechnica.com': 'Ars Technica',
+      'poetryfoundation.org': 'Poetry Foundation',
+      'theparisreview.org': 'The Paris Review',
+      'newyorker.com': 'The New Yorker',
+      'theatlantic.com': 'The Atlantic',
+      'lrb.co.uk': 'London Review of Books',
+      'nature.com': 'Nature',
+      'sciencedaily.com': 'Science Daily',
+      'sciencealert-latestnews': 'Science Alert',
+      'bloomberg.com': 'Bloomberg',
+      'feedburner.com/artsjournal': 'Arts Journal',
+      'artsy.net': 'Artsy',
+      'aeon.co': 'Aeon',
+      'brainpickings.org': 'Brain Pickings'
+    }
+    
+    for (const [key, value] of Object.entries(sourceMap)) {
+      if (url.includes(key)) return value
+    }
+    return 'Unknown Source'
+  }
+
+  const getCategory = (url) => {
+    if (url.includes('bbci.co.uk') || url.includes('cnn.com') || url.includes('npr.org') || url.includes('reuters.com')) return 'news'
+    if (url.includes('TechCrunch') || url.includes('wired.com') || url.includes('arstechnica.com')) return 'tech'
+    if (url.includes('poetryfoundation.org') || url.includes('theparisreview.org') || url.includes('newyorker.com') || url.includes('theatlantic.com') || url.includes('lrb.co.uk')) return 'literature'
+    if (url.includes('nature.com') || url.includes('sciencedaily.com') || url.includes('sciencealert')) return 'science'
+    if (url.includes('bloomberg.com')) return 'business'
+    if (url.includes('artsjournal') || url.includes('artsy.net')) return 'arts'
+    if (url.includes('aeon.co') || url.includes('brainpickings.org')) return 'philosophy'
+    return 'general'
+  }
+
+  const getCategoryColor = (category) => {
+    const colors = {
+      news: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
+      tech: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
+      literature: 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400',
+      science: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+      business: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
+      arts: 'bg-pink-100 text-pink-800 dark:bg-pink-900/20 dark:text-pink-400',
+      philosophy: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400',
+      general: 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+    }
+    return colors[category] || colors.general
+  }
+
   useEffect(() => {
     const fetchFeeds = async () => {
       try {
@@ -108,61 +163,6 @@ const FeedSection = () => {
 
     fetchFeeds()
   }, [])
-
-  const getSourceName = (url) => {
-    const sourceMap = {
-      'bbci.co.uk': 'BBC News',
-      'cnn.com': 'CNN',
-      'npr.org': 'NPR',
-      'reuters.com': 'Reuters',
-      'feedburner.com/TechCrunch': 'TechCrunch',
-      'wired.com': 'Wired',
-      'arstechnica.com': 'Ars Technica',
-      'poetryfoundation.org': 'Poetry Foundation',
-      'theparisreview.org': 'The Paris Review',
-      'newyorker.com': 'The New Yorker',
-      'theatlantic.com': 'The Atlantic',
-      'lrb.co.uk': 'London Review of Books',
-      'nature.com': 'Nature',
-      'sciencedaily.com': 'Science Daily',
-      'sciencealert-latestnews': 'Science Alert',
-      'bloomberg.com': 'Bloomberg',
-      'feedburner.com/artsjournal': 'Arts Journal',
-      'artsy.net': 'Artsy',
-      'aeon.co': 'Aeon',
-      'brainpickings.org': 'Brain Pickings'
-    }
-    
-    for (const [key, value] of Object.entries(sourceMap)) {
-      if (url.includes(key)) return value
-    }
-    return 'Unknown Source'
-  }
-
-  const getCategory = (url) => {
-    if (url.includes('bbci.co.uk') || url.includes('cnn.com') || url.includes('npr.org') || url.includes('reuters.com')) return 'news'
-    if (url.includes('TechCrunch') || url.includes('wired.com') || url.includes('arstechnica.com')) return 'tech'
-    if (url.includes('poetryfoundation.org') || url.includes('theparisreview.org') || url.includes('newyorker.com') || url.includes('theatlantic.com') || url.includes('lrb.co.uk')) return 'literature'
-    if (url.includes('nature.com') || url.includes('sciencedaily.com') || url.includes('sciencealert')) return 'science'
-    if (url.includes('bloomberg.com')) return 'business'
-    if (url.includes('artsjournal') || url.includes('artsy.net')) return 'arts'
-    if (url.includes('aeon.co') || url.includes('brainpickings.org')) return 'philosophy'
-    return 'general'
-  }
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      news: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
-      tech: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
-      literature: 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400',
-      science: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
-      business: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
-      arts: 'bg-pink-100 text-pink-800 dark:bg-pink-900/20 dark:text-pink-400',
-      philosophy: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400',
-      general: 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
-    }
-    return colors[category] || colors.general
-  }
 
   const loadMore = async () => {
     setLoadingMore(true)
