@@ -7,6 +7,7 @@ const FeedSection = () => {
   const [loadingMore, setLoadingMore] = useState(false)
   const [displayCount, setDisplayCount] = useState(6)
   const [allFeeds, setAllFeeds] = useState([])
+  const [error, setError] = useState(null)
 
   const getSourceName = (url) => {
     const sourceMap = {
@@ -31,7 +32,6 @@ const FeedSection = () => {
       'aeon.co': 'Aeon',
       'brainpickings.org': 'Brain Pickings'
     }
-    
     for (const [key, value] of Object.entries(sourceMap)) {
       if (url.includes(key)) return value
     }
@@ -66,73 +66,48 @@ const FeedSection = () => {
   useEffect(() => {
     const fetchFeeds = async () => {
       try {
-        // Fetch RSS feeds using a CORS proxy
         const proxyUrl = 'https://api.allorigins.win/raw?url='
-        
         const feedUrls = [
-          // News Sources
           'https://feeds.bbci.co.uk/news/rss.xml',
           'https://rss.cnn.com/rss/edition.rss',
           'https://feeds.npr.org/1001/rss.xml',
           'https://feeds.reuters.com/reuters/topNews',
-          
-          // Tech & Innovation
           'https://feeds.feedburner.com/TechCrunch/',
           'https://www.wired.com/feed/rss',
           'https://feeds.arstechnica.com/arstechnica/index',
-          
-          // Literature & Culture
           'https://www.poetryfoundation.org/rss/poetry.rss',
           'https://theparisreview.org/feed/',
           'https://www.newyorker.com/feed/everything',
           'https://www.theatlantic.com/feed/all/',
           'https://www.lrb.co.uk/rss',
-          
-          // Science & Discovery
           'https://feeds.nature.com/nature/rss/current',
           'https://rss.sciencedaily.com/sciencedaily.xml',
           'https://feeds.feedburner.com/sciencealert-latestnews',
-          
-          // Business & Economy
           'https://feeds.bloomberg.com/markets/news.rss',
           'https://feeds.reuters.com/reuters/businessNews',
-          
-          // Arts & Entertainment
           'https://feeds.feedburner.com/artsjournal',
           'https://www.artsy.net/rss/news',
-          
-          // Philosophy & Ideas
           'https://aeon.co/feed.rss',
           'https://www.brainpickings.org/feed/'
         ]
-
         const feedPromises = feedUrls.map(async (url, index) => {
           try {
             const response = await fetch(proxyUrl + encodeURIComponent(url))
             const text = await response.text()
-            
-            // Simple RSS parser
             const parser = new DOMParser()
             const xmlDoc = parser.parseFromString(text, 'text/xml')
-            
             const items = xmlDoc.querySelectorAll('item')
             const articles = []
-            
             items.forEach((item, itemIndex) => {
-              if (itemIndex < 4) { // Get first 4 articles from each feed
+              if (itemIndex < 4) {
                 const title = item.querySelector('title')?.textContent || 'Untitled'
                 const link = item.querySelector('link')?.textContent || '#'
-                const description = item.querySelector('description')?.textContent || 
-                                 item.querySelector('content\\:encoded')?.textContent || 
-                                 'No description available'
+                const description = item.querySelector('description')?.textContent || item.querySelector('content\\:encoded')?.textContent || 'No description available'
                 const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString()
-                
-                // Extract image from description or use null
                 const imgMatch = description.match(/<img[^>]+src="([^"]+)"/)
                 const image = imgMatch ? imgMatch[1] : null
-                
                 articles.push({
-                  title: title.replace(/<[^>]*>/g, ''), // Remove HTML tags
+                  title: title.replace(/<[^>]*>/g, ''),
                   excerpt: description.replace(/<[^>]*>/g, '').substring(0, 120) + '...',
                   date: new Date(pubDate).toLocaleDateString(),
                   url: link,
@@ -142,36 +117,41 @@ const FeedSection = () => {
                 })
               }
             })
-            
             return articles
           } catch (error) {
-            console.error(`Error fetching ${url}:`, error)
             return []
           }
         })
-
         const allFeeds = await Promise.all(feedPromises)
         const flattenedFeeds = allFeeds.flat()
         setAllFeeds(flattenedFeeds)
         setFeeds(flattenedFeeds.slice(0, displayCount))
         setLoading(false)
       } catch (error) {
-        console.error('Error fetching feeds:', error)
+        setError('Failed to load feeds. Please try again later.')
         setLoading(false)
       }
     }
-
     fetchFeeds()
   }, [])
 
   const loadMore = async () => {
     setLoadingMore(true)
-    // Simulate loading delay
     await new Promise(resolve => setTimeout(resolve, 500))
     const newCount = displayCount + 6
     setDisplayCount(newCount)
     setFeeds(allFeeds.slice(0, newCount))
     setLoadingMore(false)
+  }
+
+  if (error) {
+    return (
+      <div className="card p-6 text-center text-red-600 dark:text-red-400">
+        <BookOpen className="w-6 h-6 text-primary mx-auto mb-4" />
+        <h2 className="text-2xl font-linertinas mb-2">Recommended Articles</h2>
+        <p>{error}</p>
+      </div>
+    )
   }
 
   if (loading) {
@@ -256,7 +236,6 @@ const FeedSection = () => {
           </div>
         ))}
       </div>
-      
       {feeds.length < allFeeds.length && (
         <div className="flex justify-center mt-8">
           <button
