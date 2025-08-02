@@ -13,7 +13,7 @@ const ClockDisplay = () => {
   }, [])
 
   return (
-    <div className="text-center text-white/90 animate-fade-in">
+    <div className="text-center text-white/90">
       <div className="flex items-center justify-center gap-2 mb-2">
         <Clock className="w-5 h-5" />
         <div className="text-2xl md:text-3xl font-figtree">

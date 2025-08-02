@@ -113,14 +113,14 @@ const FeedSection = () => {
 
   if (loading) {
     return (
-      <div className="card p-6 animate-fade-in">
+      <div className="card p-6">
         <div className="flex items-center gap-2 mb-6">
           <BookOpen className="w-6 h-6 text-primary" />
           <h2 className="text-2xl font-linertinas">Recommended Articles</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="feed-card animate-pulse">
+            <div key={i} className="feed-card">
               <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
               <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
               <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
@@ -132,20 +132,20 @@ const FeedSection = () => {
   }
 
   return (
-    <div className="card p-6 animate-fade-in">
+    <div className="card p-6">
       <div className="flex items-center gap-2 mb-6">
         <BookOpen className="w-6 h-6 text-primary" />
         <h2 className="text-2xl font-linertinas">Recommended Articles</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {feeds.map((feed, index) => (
-          <div key={index} className="feed-card group">
+          <div key={index} className="feed-card">
             {feed.image && (
               <div className="relative overflow-hidden rounded-lg mb-4">
                 <img 
                   src={feed.image} 
                   alt={feed.title}
-                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="w-full h-48 object-cover"
                 />
                 <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
                   {feed.source}
@@ -153,7 +153,7 @@ const FeedSection = () => {
               </div>
             )}
             <div className="space-y-3">
-              <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:text-primary transition-colors duration-200">
+              <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2">
                 {feed.title}
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
@@ -174,7 +174,7 @@ const FeedSection = () => {
                 href={feed.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors duration-200"
+                className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"
               >
                 <ExternalLink className="w-3 h-3" />
                 Read Article

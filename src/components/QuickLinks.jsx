@@ -45,7 +45,7 @@ const QuickLinks = () => {
   ]
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6">
       <h2 className="text-2xl font-linertinas text-white text-center">Quick Links</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {categories.map((category) => (
@@ -61,7 +61,7 @@ const QuickLinks = () => {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors duration-200"
+                  className="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
                 >
                   {link.name}
                 </a>

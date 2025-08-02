@@ -51,7 +51,7 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto animate-slide-up">
+    <div className="max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
           <input

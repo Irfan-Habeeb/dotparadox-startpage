@@ -30,7 +30,7 @@ function App() {
       {/* Dark mode toggle */}
       <button
         onClick={toggleDarkMode}
-        className="fixed top-6 right-6 z-50 p-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-full shadow-lg border border-gray-200/30 dark:border-gray-700/30 hover:bg-white/95 dark:hover:bg-gray-800/95"
+        className="fixed top-6 right-6 z-50 p-3 bg-white/90 dark:bg-gray-800/90 rounded-full shadow-lg border border-gray-200/30 dark:border-gray-700/30 hover:bg-white/95 dark:hover:bg-gray-800/95"
       >
         {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
       </button>
