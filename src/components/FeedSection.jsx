@@ -67,45 +67,46 @@ const FeedSection = () => {
     const fetchFeeds = async () => {
       try {
         const proxyUrl = 'https://api.allorigins.win/raw?url='
+        // Reduced number of feeds for better performance
         const feedUrls = [
           'https://feeds.bbci.co.uk/news/rss.xml',
           'https://rss.cnn.com/rss/edition.rss',
           'https://feeds.npr.org/1001/rss.xml',
-          'https://feeds.reuters.com/reuters/topNews',
           'https://feeds.feedburner.com/TechCrunch/',
           'https://www.wired.com/feed/rss',
-          'https://feeds.arstechnica.com/arstechnica/index',
           'https://www.poetryfoundation.org/rss/poetry.rss',
           'https://theparisreview.org/feed/',
           'https://www.newyorker.com/feed/everything',
-          'https://www.theatlantic.com/feed/all/',
-          'https://www.lrb.co.uk/rss',
           'https://feeds.nature.com/nature/rss/current',
-          'https://rss.sciencedaily.com/sciencedaily.xml',
-          'https://feeds.feedburner.com/sciencealert-latestnews',
           'https://feeds.bloomberg.com/markets/news.rss',
-          'https://feeds.reuters.com/reuters/businessNews',
-          'https://feeds.feedburner.com/artsjournal',
-          'https://www.artsy.net/rss/news',
-          'https://aeon.co/feed.rss',
-          'https://www.brainpickings.org/feed/'
+          'https://aeon.co/feed.rss'
         ]
+        
         const feedPromises = feedUrls.map(async (url, index) => {
           try {
-            const response = await fetch(proxyUrl + encodeURIComponent(url))
+            const controller = new AbortController()
+            const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
+            
+            const response = await fetch(proxyUrl + encodeURIComponent(url), {
+              signal: controller.signal
+            })
+            clearTimeout(timeoutId)
+            
             const text = await response.text()
             const parser = new DOMParser()
             const xmlDoc = parser.parseFromString(text, 'text/xml')
             const items = xmlDoc.querySelectorAll('item')
             const articles = []
+            
             items.forEach((item, itemIndex) => {
-              if (itemIndex < 4) {
+              if (itemIndex < 3) { // Reduced from 4 to 3 articles per feed
                 const title = item.querySelector('title')?.textContent || 'Untitled'
                 const link = item.querySelector('link')?.textContent || '#'
                 const description = item.querySelector('description')?.textContent || item.querySelector('content\\:encoded')?.textContent || 'No description available'
                 const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString()
                 const imgMatch = description.match(/<img[^>]+src="([^"]+)"/)
                 const image = imgMatch ? imgMatch[1] : null
+                
                 articles.push({
                   title: title.replace(/<[^>]*>/g, ''),
                   excerpt: description.replace(/<[^>]*>/g, '').substring(0, 120) + '...',
@@ -122,6 +123,7 @@ const FeedSection = () => {
             return []
           }
         })
+
         const allFeeds = await Promise.all(feedPromises)
         const flattenedFeeds = allFeeds.flat()
         setAllFeeds(flattenedFeeds)
@@ -137,7 +139,7 @@ const FeedSection = () => {
 
   const loadMore = async () => {
     setLoadingMore(true)
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(resolve, 300)) // Reduced delay
     const newCount = displayCount + 6
     setDisplayCount(newCount)
     setFeeds(allFeeds.slice(0, newCount))
@@ -189,6 +191,7 @@ const FeedSection = () => {
                   src={feed.image} 
                   alt={feed.title}
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
                 />
                 <div className="absolute top-3 left-3">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(feed.category)}`}>

@@ -14,7 +14,7 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #000;
+    background: #0f172a;
   }
 
   * {
@@ -26,11 +26,10 @@
   .blur-bg {
     position: relative;
     min-height: 100vh;
-    background: #1e293b;
-    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80');
+    background: #0f172a;
+    background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1500&q=80');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
   }
 
   .blur-bg::before {
@@ -43,8 +42,8 @@
     background: inherit;
     background-size: cover;
     background-position: center;
-    filter: blur(30px) brightness(0.8);
-    transform: scale(1.2);
+    filter: blur(25px) brightness(0.7);
+    transform: scale(1.1);
     z-index: -2;
   }
 
@@ -55,7 +54,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%);
     z-index: -1;
   }
   
