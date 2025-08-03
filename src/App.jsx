@@ -48,6 +48,18 @@ function App() {
     return saved ? JSON.parse(saved) : false
   })
   const [showSettings, setShowSettings] = useState(false)
+  const [backgroundType, setBackgroundType] = useState(() => {
+    const saved = localStorage.getItem('backgroundType')
+    return saved || 'gradient'
+  })
+  const [gradientColors, setGradientColors] = useState(() => {
+    const saved = localStorage.getItem('gradientColors')
+    return saved ? JSON.parse(saved) : ['#3e51b5', '#9B51E0']
+  })
+  const [staticColor, setStaticColor] = useState(() => {
+    const saved = localStorage.getItem('staticColor')
+    return saved || '#3e51b5'
+  })
 
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode))
@@ -58,6 +70,18 @@ function App() {
     }
   }, [darkMode])
 
+  useEffect(() => {
+    localStorage.setItem('backgroundType', backgroundType)
+  }, [backgroundType])
+
+  useEffect(() => {
+    localStorage.setItem('gradientColors', JSON.stringify(gradientColors))
+  }, [gradientColors])
+
+  useEffect(() => {
+    localStorage.setItem('staticColor', staticColor)
+  }, [staticColor])
+
   const toggleDarkMode = () => {
     setDarkMode(!darkMode)
   }
@@ -66,9 +90,27 @@ function App() {
     setShowSettings(!showSettings)
   }
 
+  const updateGradientColor = (index, color) => {
+    const newColors = [...gradientColors]
+    newColors[index] = color
+    setGradientColors(newColors)
+  }
+
+  const getBackgroundStyle = () => {
+    if (backgroundType === 'static') {
+      return { background: staticColor }
+    } else {
+      return {
+        background: `linear-gradient(135deg, ${gradientColors[0]} 0%, ${gradientColors[1]} 100%)`,
+        backgroundSize: '400% 400%',
+        animation: 'gradientShift 15s ease-in-out infinite'
+      }
+    }
+  }
+
   return (
     <ErrorBoundary>
-      <div className="min-h-screen blur-bg relative overflow-hidden">
+      <div className="min-h-screen relative overflow-hidden" style={getBackgroundStyle()}>
         {/* Menu button */}
         <button
           onClick={toggleSettings}
@@ -89,22 +131,102 @@ function App() {
         {showSettings && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/50" onClick={toggleSettings}></div>
-            <div className="relative bg-white/95 dark:bg-gray-800/95 rounded-xl shadow-xl border border-white/30 dark:border-gray-700/30 p-6 max-w-md w-full mx-4">
+            <div className="relative bg-white/95 dark:bg-gray-800/95 rounded-xl shadow-xl border border-white/30 dark:border-gray-700/30 p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
               <h2 className="text-2xl font-lora font-semibold text-blue-800 mb-4">Settings</h2>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Background</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Background Type</h3>
                   <div className="space-y-2">
                     <label className="flex items-center">
-                      <input type="radio" name="background" value="gradient" className="mr-2" defaultChecked />
+                      <input 
+                        type="radio" 
+                        name="background" 
+                        value="gradient" 
+                        checked={backgroundType === 'gradient'}
+                        onChange={(e) => setBackgroundType(e.target.value)}
+                        className="mr-2" 
+                      />
                       <span className="text-gray-700 dark:text-gray-300">Gradient (Moving)</span>
                     </label>
                     <label className="flex items-center">
-                      <input type="radio" name="background" value="static" className="mr-2" />
+                      <input 
+                        type="radio" 
+                        name="background" 
+                        value="static" 
+                        checked={backgroundType === 'static'}
+                        onChange={(e) => setBackgroundType(e.target.value)}
+                        className="mr-2" 
+                      />
                       <span className="text-gray-700 dark:text-gray-300">Static</span>
                     </label>
                   </div>
                 </div>
+
+                {backgroundType === 'gradient' && (
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Gradient Colors</h3>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-sm text-gray-700 dark:text-gray-300 mb-1">Color 1</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={gradientColors[0]}
+                            onChange={(e) => updateGradientColor(0, e.target.value)}
+                            className="w-12 h-8 rounded border"
+                          />
+                          <input
+                            type="text"
+                            value={gradientColors[0]}
+                            onChange={(e) => updateGradientColor(0, e.target.value)}
+                            className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white/80 dark:bg-gray-700/80"
+                            placeholder="#3e51b5"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm text-gray-700 dark:text-gray-300 mb-1">Color 2</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={gradientColors[1]}
+                            onChange={(e) => updateGradientColor(1, e.target.value)}
+                            className="w-12 h-8 rounded border"
+                          />
+                          <input
+                            type="text"
+                            value={gradientColors[1]}
+                            onChange={(e) => updateGradientColor(1, e.target.value)}
+                            className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white/80 dark:bg-gray-700/80"
+                            placeholder="#9B51E0"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {backgroundType === 'static' && (
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Static Color</h3>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={staticColor}
+                        onChange={(e) => setStaticColor(e.target.value)}
+                        className="w-12 h-8 rounded border"
+                      />
+                      <input
+                        type="text"
+                        value={staticColor}
+                        onChange={(e) => setStaticColor(e.target.value)}
+                        className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white/80 dark:bg-gray-700/80"
+                        placeholder="#3e51b5"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     onClick={toggleSettings}
