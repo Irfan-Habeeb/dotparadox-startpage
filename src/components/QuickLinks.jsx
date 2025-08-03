@@ -14,47 +14,47 @@ const QuickLinks = () => {
         name: 'Writing',
         icon: 'PenTool',
         links: [
-          { name: 'Notion', url: 'https://notion.so', icon: 'FileText' },
-          { name: 'Medium', url: 'https://medium.com', icon: 'FileText' },
-          { name: 'Substack', url: 'https://substack.com', icon: 'FileText' },
-          { name: 'WordPress', url: 'https://wordpress.com', icon: 'FileText' }
+          { name: 'Notion', url: 'https://notion.so' },
+          { name: 'Medium', url: 'https://medium.com' },
+          { name: 'Substack', url: 'https://substack.com' },
+          { name: 'WordPress', url: 'https://wordpress.com' }
         ]
       },
       {
         name: 'Reading',
         icon: 'BookOpen',
         links: [
-          { name: 'Goodreads', url: 'https://goodreads.com', icon: 'BookOpen' },
-          { name: 'Pocket', url: 'https://getpocket.com', icon: 'FileText' },
-          { name: 'Instapaper', url: 'https://instapaper.com', icon: 'FileText' },
-          { name: 'Feedly', url: 'https://feedly.com', icon: 'Rss' }
+          { name: 'Goodreads', url: 'https://goodreads.com' },
+          { name: 'Pocket', url: 'https://getpocket.com' },
+          { name: 'Instapaper', url: 'https://instapaper.com' },
+          { name: 'Feedly', url: 'https://feedly.com' }
         ]
       },
       {
         name: 'Tools',
         icon: 'Settings',
         links: [
-          { name: 'GitHub', url: 'https://github.com', icon: 'Github' },
-          { name: 'Figma', url: 'https://figma.com', icon: 'FileText' },
-          { name: 'Notion', url: 'https://notion.so', icon: 'FileText' },
-          { name: 'Linear', url: 'https://linear.app', icon: 'FileText' }
+          { name: 'GitHub', url: 'https://github.com' },
+          { name: 'Figma', url: 'https://figma.com' },
+          { name: 'Notion', url: 'https://notion.so' },
+          { name: 'Linear', url: 'https://linear.app' }
         ]
       },
       {
         name: 'Social',
         icon: 'Globe',
         links: [
-          { name: 'Twitter', url: 'https://twitter.com', icon: 'Twitter' },
-          { name: 'LinkedIn', url: 'https://linkedin.com', icon: 'Linkedin' },
-          { name: 'Instagram', url: 'https://instagram.com', icon: 'Instagram' },
-          { name: 'Discord', url: 'https://discord.com', icon: 'MessageCircle' }
+          { name: 'Twitter', url: 'https://twitter.com' },
+          { name: 'LinkedIn', url: 'https://linkedin.com' },
+          { name: 'Instagram', url: 'https://instagram.com' },
+          { name: 'Discord', url: 'https://discord.com' }
         ]
       }
     ]
   })
   const [editing, setEditing] = useState(false)
   const [editingCategory, setEditingCategory] = useState(null)
-  const [newLink, setNewLink] = useState({ name: '', url: '', icon: 'Globe' })
+  const [newLink, setNewLink] = useState({ name: '', url: '' })
   const [editingCategoryName, setEditingCategoryName] = useState('')
   const [editingCategoryIcon, setEditingCategoryIcon] = useState('')
 
@@ -78,6 +78,15 @@ const QuickLinks = () => {
     localStorage.setItem('quickLinks', JSON.stringify(categories))
   }, [categories])
 
+  const getFaviconUrl = (url) => {
+    try {
+      const domain = new URL(url).hostname
+      return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`
+    } catch (error) {
+      return null
+    }
+  }
+
   const addLink = async (categoryIndex) => {
     if (newLink.name && newLink.url) {
       let url = newLink.url
@@ -88,11 +97,10 @@ const QuickLinks = () => {
       const updatedCategories = [...categories]
       updatedCategories[categoryIndex].links.push({ 
         name: newLink.name, 
-        url: url, 
-        icon: newLink.icon
+        url: url
       })
       setCategories(updatedCategories)
-      setNewLink({ name: '', url: '', icon: 'Globe' })
+      setNewLink({ name: '', url: '' })
     }
   }
 
@@ -217,7 +225,7 @@ const QuickLinks = () => {
               
               <div className="grid grid-cols-2 gap-3">
                 {category.links.map((link, linkIndex) => {
-                  const LinkIconComponent = iconMap[link.icon]
+                  const faviconUrl = getFaviconUrl(link.url)
                   return (
                     <div key={link.name} className="relative group">
                       <a
@@ -227,7 +235,21 @@ const QuickLinks = () => {
                         className="block p-3 bg-white/15 hover:bg-white/25 rounded-lg text-center"
                       >
                         <div className="w-8 h-8 mx-auto mb-2 flex items-center justify-center">
-                          <LinkIconComponent className="w-full h-full text-white/90" />
+                          {faviconUrl ? (
+                            <img 
+                              src={faviconUrl} 
+                              alt={link.name}
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                // Fallback to a simple globe icon if favicon fails
+                                e.target.style.display = 'none'
+                                e.target.nextSibling.style.display = 'flex'
+                              }}
+                            />
+                          ) : null}
+                          <div className={`w-full h-full ${faviconUrl ? 'hidden' : 'flex'} items-center justify-center`}>
+                            <Globe className="w-full h-full text-white/90" />
+                          </div>
                         </div>
                         <span className="text-xs text-white/90 font-medium">{link.name}</span>
                       </a>
@@ -260,15 +282,6 @@ const QuickLinks = () => {
                         onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
                         className="w-full px-2 py-1 text-xs border border-white/30 rounded bg-white/20 text-white placeholder-white/50"
                       />
-                      <select
-                        value={newLink.icon}
-                        onChange={(e) => setNewLink({ ...newLink, icon: e.target.value })}
-                        className="w-full px-2 py-1 text-xs border border-white/30 rounded bg-white/20 text-white"
-                      >
-                        {availableIcons.map(icon => (
-                          <option key={icon} value={icon}>{icon}</option>
-                        ))}
-                      </select>
                       <button
                         onClick={() => addLink(categoryIndex)}
                         className="w-full px-2 py-1 bg-white/20 hover:bg-white/30 text-white text-xs rounded"
