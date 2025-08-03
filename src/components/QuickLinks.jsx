@@ -78,22 +78,6 @@ const QuickLinks = () => {
     localStorage.setItem('quickLinks', JSON.stringify(categories))
   }, [categories])
 
-  const getFavicon = async (url) => {
-    try {
-      const domain = new URL(url).hostname
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`
-      
-      // Test if favicon exists
-      const response = await fetch(faviconUrl)
-      if (response.ok) {
-        return faviconUrl
-      }
-    } catch (error) {
-      console.log('Favicon fetch failed:', error)
-    }
-    return null
-  }
-
   const addLink = async (categoryIndex) => {
     if (newLink.name && newLink.url) {
       let url = newLink.url
@@ -101,20 +85,11 @@ const QuickLinks = () => {
         url = `https://${url}`
       }
       
-      // Try to get favicon for the new link
-      let faviconUrl = null
-      try {
-        faviconUrl = await getFavicon(url)
-      } catch (error) {
-        console.log('Could not fetch favicon:', error)
-      }
-      
       const updatedCategories = [...categories]
       updatedCategories[categoryIndex].links.push({ 
         name: newLink.name, 
         url: url, 
-        icon: newLink.icon,
-        favicon: faviconUrl // Store favicon URL if available
+        icon: newLink.icon
       })
       setCategories(updatedCategories)
       setNewLink({ name: '', url: '', icon: 'Globe' })
@@ -252,21 +227,7 @@ const QuickLinks = () => {
                         className="block p-3 bg-white/20 hover:bg-white/30 rounded-lg text-center transition-all"
                       >
                         <div className="w-8 h-8 mx-auto mb-2 flex items-center justify-center">
-                          {link.favicon ? (
-                            <img 
-                              src={link.favicon} 
-                              alt={link.name}
-                              className="w-full h-full object-contain"
-                              onError={(e) => {
-                                // Fallback to Lucide icon if favicon fails to load
-                                e.target.style.display = 'none'
-                                e.target.nextSibling.style.display = 'block'
-                              }}
-                            />
-                          ) : null}
-                          <div className={`w-full h-full ${link.favicon ? 'hidden' : 'block'}`}>
-                            <LinkIconComponent className="w-full h-full text-white" />
-                          </div>
+                          <LinkIconComponent className="w-full h-full text-white" />
                         </div>
                         <span className="text-xs text-white font-medium">{link.name}</span>
                       </a>
