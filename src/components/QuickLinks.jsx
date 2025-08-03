@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import { 
   BookOpen, PenTool, Settings, Globe, Music, Camera, Code, Heart, Plus, Edit2, X,
-  Github, Twitter, Linkedin, Instagram, Discord, Figma, Notion, Linear, Medium,
-  Substack, WordPress, Goodreads, Pocket, Instapaper, Feedly, Coffee, Zap, Palette,
-  Home, Mail, Calendar, FileText, Image, Video, Download, Upload, Share2, Star,
-  Search, User, Users, Lock, Unlock, Eye, EyeOff, Bell, MessageCircle, Phone
+  Github, Twitter, Linkedin, Instagram, MessageCircle, FileText, Calendar, Mail, Home,
+  Coffee, Zap, Palette, Image, Video, Download, Upload, Share2, Star,
+  Search, User, Users, Lock, Unlock, Eye, EyeOff, Bell, Phone, Rss
 } from 'lucide-react'
 
 const QuickLinks = () => {
@@ -15,10 +14,10 @@ const QuickLinks = () => {
         name: 'Writing',
         icon: 'PenTool',
         links: [
-          { name: 'Notion', url: 'https://notion.so', icon: 'Notion' },
-          { name: 'Medium', url: 'https://medium.com', icon: 'Medium' },
-          { name: 'Substack', url: 'https://substack.com', icon: 'Substack' },
-          { name: 'WordPress', url: 'https://wordpress.com', icon: 'WordPress' }
+          { name: 'Notion', url: 'https://notion.so', icon: 'FileText' },
+          { name: 'Medium', url: 'https://medium.com', icon: 'FileText' },
+          { name: 'Substack', url: 'https://substack.com', icon: 'FileText' },
+          { name: 'WordPress', url: 'https://wordpress.com', icon: 'FileText' }
         ]
       },
       {
@@ -26,7 +25,7 @@ const QuickLinks = () => {
         icon: 'BookOpen',
         links: [
           { name: 'Goodreads', url: 'https://goodreads.com', icon: 'BookOpen' },
-          { name: 'Pocket', url: 'https://getpocket.com', icon: 'Pocket' },
+          { name: 'Pocket', url: 'https://getpocket.com', icon: 'FileText' },
           { name: 'Instapaper', url: 'https://instapaper.com', icon: 'FileText' },
           { name: 'Feedly', url: 'https://feedly.com', icon: 'Rss' }
         ]
@@ -36,9 +35,9 @@ const QuickLinks = () => {
         icon: 'Settings',
         links: [
           { name: 'GitHub', url: 'https://github.com', icon: 'Github' },
-          { name: 'Figma', url: 'https://figma.com', icon: 'Figma' },
-          { name: 'Notion', url: 'https://notion.so', icon: 'Notion' },
-          { name: 'Linear', url: 'https://linear.app', icon: 'Linear' }
+          { name: 'Figma', url: 'https://figma.com', icon: 'FileText' },
+          { name: 'Notion', url: 'https://notion.so', icon: 'FileText' },
+          { name: 'Linear', url: 'https://linear.app', icon: 'FileText' }
         ]
       },
       {
@@ -48,7 +47,7 @@ const QuickLinks = () => {
           { name: 'Twitter', url: 'https://twitter.com', icon: 'Twitter' },
           { name: 'LinkedIn', url: 'https://linkedin.com', icon: 'Linkedin' },
           { name: 'Instagram', url: 'https://instagram.com', icon: 'Instagram' },
-          { name: 'Discord', url: 'https://discord.com', icon: 'Discord' }
+          { name: 'Discord', url: 'https://discord.com', icon: 'MessageCircle' }
         ]
       }
     ]
@@ -63,23 +62,37 @@ const QuickLinks = () => {
     // Category icons
     PenTool, BookOpen, Settings, Globe, Music, Camera, Code, Heart,
     // Link icons
-    Github, Twitter, Linkedin, Instagram, Discord, Figma, Notion, Linear, Medium,
-    Substack, WordPress, Goodreads, Pocket, Instapaper, Feedly, Coffee, Zap, Palette,
-    Home, Mail, Calendar, FileText, Image, Video, Download, Upload, Share2, Star,
-    Search, User, Users, Lock, Unlock, Eye, EyeOff, Bell, MessageCircle, Phone
+    Github, Twitter, Linkedin, Instagram, MessageCircle, FileText, Calendar, Mail, Home,
+    Coffee, Zap, Palette, Image, Video, Download, Upload, Share2, Star,
+    Search, User, Users, Lock, Unlock, Eye, EyeOff, Bell, Phone, Rss
   }
 
   const availableIcons = [
-    'Github', 'Twitter', 'Linkedin', 'Instagram', 'Discord', 'Figma', 'Notion', 'Linear', 'Medium',
-    'Substack', 'WordPress', 'Goodreads', 'Pocket', 'Instapaper', 'Feedly', 'Coffee', 'Zap', 'Palette',
-    'Home', 'Mail', 'Calendar', 'FileText', 'Image', 'Video', 'Download', 'Upload', 'Share2', 'Star',
-    'Search', 'User', 'Users', 'Lock', 'Unlock', 'Eye', 'EyeOff', 'Bell', 'MessageCircle', 'Phone',
-    'Globe', 'BookOpen', 'PenTool', 'Settings', 'Music', 'Camera', 'Code', 'Heart'
+    'Github', 'Twitter', 'Linkedin', 'Instagram', 'MessageCircle', 'FileText', 'Calendar', 'Mail', 'Home',
+    'Coffee', 'Zap', 'Palette', 'Image', 'Video', 'Download', 'Upload', 'Share2', 'Star',
+    'Search', 'User', 'Users', 'Lock', 'Unlock', 'Eye', 'EyeOff', 'Bell', 'Phone',
+    'Globe', 'BookOpen', 'PenTool', 'Settings', 'Music', 'Camera', 'Code', 'Heart', 'Rss'
   ]
 
   useEffect(() => {
     localStorage.setItem('quickLinks', JSON.stringify(categories))
   }, [categories])
+
+  const getFavicon = async (url) => {
+    try {
+      const domain = new URL(url).hostname
+      const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`
+      
+      // Test if favicon exists
+      const response = await fetch(faviconUrl)
+      if (response.ok) {
+        return faviconUrl
+      }
+    } catch (error) {
+      console.log('Favicon fetch failed:', error)
+    }
+    return null
+  }
 
   const addLink = async (categoryIndex) => {
     if (newLink.name && newLink.url) {
@@ -88,11 +101,20 @@ const QuickLinks = () => {
         url = `https://${url}`
       }
       
+      // Try to get favicon for the new link
+      let faviconUrl = null
+      try {
+        faviconUrl = await getFavicon(url)
+      } catch (error) {
+        console.log('Could not fetch favicon:', error)
+      }
+      
       const updatedCategories = [...categories]
       updatedCategories[categoryIndex].links.push({ 
         name: newLink.name, 
         url: url, 
-        icon: newLink.icon
+        icon: newLink.icon,
+        favicon: faviconUrl // Store favicon URL if available
       })
       setCategories(updatedCategories)
       setNewLink({ name: '', url: '', icon: 'Globe' })
@@ -230,7 +252,21 @@ const QuickLinks = () => {
                         className="block p-3 bg-white/20 hover:bg-white/30 rounded-lg text-center transition-all"
                       >
                         <div className="w-8 h-8 mx-auto mb-2 flex items-center justify-center">
-                          <LinkIconComponent className="w-full h-full text-white" />
+                          {link.favicon ? (
+                            <img 
+                              src={link.favicon} 
+                              alt={link.name}
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                // Fallback to Lucide icon if favicon fails to load
+                                e.target.style.display = 'none'
+                                e.target.nextSibling.style.display = 'block'
+                              }}
+                            />
+                          ) : null}
+                          <div className={`w-full h-full ${link.favicon ? 'hidden' : 'block'}`}>
+                            <LinkIconComponent className="w-full h-full text-white" />
+                          </div>
                         </div>
                         <span className="text-xs text-white font-medium">{link.name}</span>
                       </a>
