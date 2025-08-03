@@ -184,13 +184,13 @@ const FeedSection = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {feeds.map((feed, index) => (
-          <div key={index} className="group feed-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div key={index} className="group feed-card">
             {feed.image && (
               <div className="relative overflow-hidden rounded-t-xl">
                 <img 
                   src={feed.image} 
                   alt={feed.title}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-48 object-cover"
                   loading="lazy"
                 />
                 <div className="absolute top-3 left-3">
@@ -214,7 +214,7 @@ const FeedSection = () => {
                   {feed.source}
                 </span>
               </div>
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-3 group-hover:text-primary transition-colors">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-3 group-hover:text-primary">
                 {feed.title}
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-4">
@@ -229,7 +229,7 @@ const FeedSection = () => {
                   href={feed.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 group-hover:gap-2 transition-all"
+                  className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"
                 >
                   <span>Read</span>
                   <ArrowRight className="w-3 h-3" />
