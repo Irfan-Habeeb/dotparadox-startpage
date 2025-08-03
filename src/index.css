@@ -27,6 +27,8 @@
     position: relative;
     min-height: 100vh;
     background: linear-gradient(135deg, #3e51b5 0%, #5b6bc0 25%, #7986cb 50%, #9fa8da 75%, #c5cae9 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease-in-out infinite;
   }
 
   .blur-bg::after {
@@ -38,6 +40,15 @@
     bottom: 0;
     background: linear-gradient(135deg, rgba(62, 81, 181, 0.3) 0%, rgba(155, 81, 224, 0.2) 100%);
     z-index: -1;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
   
   .card {
