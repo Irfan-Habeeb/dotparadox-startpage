@@ -245,7 +245,7 @@ const FeedSection = () => {
           <button
             onClick={loadMore}
             disabled={loadingMore}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium flex items-center gap-2"
+            className="px-6 py-3 bg-white hover:bg-gray-100 text-gray-900 rounded-xl font-medium flex items-center gap-2"
           >
             {loadingMore ? (
               <>

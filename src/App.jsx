@@ -54,7 +54,7 @@ function App() {
   })
   const [gradientColors, setGradientColors] = useState(() => {
     const saved = localStorage.getItem('gradientColors')
-    return saved ? JSON.parse(saved) : ['#3e51b5', '#9B51E0']
+    return saved ? JSON.parse(saved) : ['#1a1a2e', '#16213e']
   })
   const [staticColor, setStaticColor] = useState(() => {
     const saved = localStorage.getItem('staticColor')
