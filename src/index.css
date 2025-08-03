@@ -14,7 +14,7 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #1e3a8a;
+    background: #3e51b5;
   }
 
   * {
@@ -26,7 +26,7 @@
   .blur-bg {
     position: relative;
     min-height: 100vh;
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 25%, #60a5fa 50%, #93c5fd 75%, #dbeafe 100%);
+    background: linear-gradient(135deg, #3e51b5 0%, #5b6bc0 25%, #7986cb 50%, #9fa8da 75%, #c5cae9 100%);
   }
 
   .blur-bg::after {
@@ -36,7 +36,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(59, 130, 246, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(62, 81, 181, 0.3) 0%, rgba(155, 81, 224, 0.2) 100%);
     z-index: -1;
   }
   
