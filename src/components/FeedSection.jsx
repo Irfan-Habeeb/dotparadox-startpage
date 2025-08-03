@@ -151,7 +151,7 @@ const FeedSection = () => {
     return (
       <div className="card p-6 text-center text-red-600 dark:text-red-400">
         <BookOpen className="w-6 h-6 text-primary mx-auto mb-4" />
-        <h2 className="text-2xl font-linertinas mb-2">Recommended Articles</h2>
+        <h2 className="text-2xl font-lora font-semibold mb-2">Recommended Articles</h2>
         <p>{error}</p>
       </div>
     )
@@ -162,7 +162,7 @@ const FeedSection = () => {
       <div className="card p-6">
         <div className="flex items-center gap-2 mb-6">
           <BookOpen className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-linertinas">Recommended Articles</h2>
+          <h2 className="text-2xl font-lora font-semibold">Recommended Articles</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -181,7 +181,7 @@ const FeedSection = () => {
     <div className="card p-6">
       <div className="flex items-center gap-2 mb-6">
         <BookOpen className="w-6 h-6 text-primary" />
-        <h2 className="text-2xl font-linertinas">Recommended Articles</h2>
+        <h2 className="text-2xl font-lora font-semibold">Recommended Articles</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedFeeds.map((feed, index) => (

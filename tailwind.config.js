@@ -17,6 +17,7 @@ export default {
       fontFamily: {
         'linertinas': ['Linertinas Sans', 'sans-serif'],
         'figtree': ['Figtree', 'sans-serif'],
+        'lora': ['Lora', 'serif'],
       },
       letterSpacing: {
         'breathable': '0.025em',
