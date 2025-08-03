@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
 import React from 'react'
-import { Moon, Sun } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Moon, Sun, Menu } from 'lucide-react'
 import SearchBar from './components/SearchBar'
 import ClockDisplay from './components/ClockDisplay'
 import QuickLinks from './components/QuickLinks'
@@ -47,6 +47,7 @@ function App() {
     const saved = localStorage.getItem('darkMode')
     return saved ? JSON.parse(saved) : false
   })
+  const [showSettings, setShowSettings] = useState(false)
 
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode))
@@ -61,9 +62,21 @@ function App() {
     setDarkMode(!darkMode)
   }
 
+  const toggleSettings = () => {
+    setShowSettings(!showSettings)
+  }
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen blur-bg relative overflow-hidden">
+        {/* Menu button */}
+        <button
+          onClick={toggleSettings}
+          className="fixed top-6 left-6 z-50 p-3 bg-white/90 dark:bg-gray-800/90 rounded-full shadow-lg border border-gray-200/30 dark:border-gray-700/30 hover:bg-white/95 dark:hover:bg-gray-800/95"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
         {/* Dark mode toggle */}
         <button
           onClick={toggleDarkMode}
@@ -71,6 +84,39 @@ function App() {
         >
           {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
+
+        {/* Settings Modal */}
+        {showSettings && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/50" onClick={toggleSettings}></div>
+            <div className="relative bg-white/95 dark:bg-gray-800/95 rounded-xl shadow-xl border border-white/30 dark:border-gray-700/30 p-6 max-w-md w-full mx-4">
+              <h2 className="text-2xl font-lora font-semibold text-blue-800 mb-4">Settings</h2>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Background</h3>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="radio" name="background" value="gradient" className="mr-2" defaultChecked />
+                      <span className="text-gray-700 dark:text-gray-300">Gradient (Moving)</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input type="radio" name="background" value="static" className="mr-2" />
+                      <span className="text-gray-700 dark:text-gray-300">Static</span>
+                    </label>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={toggleSettings}
+                    className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Main content */}
         <div className="relative z-10 container mx-auto px-4 py-8">
