@@ -150,8 +150,8 @@ const FeedSection = () => {
   if (error) {
     return (
       <div className="text-center text-red-600 dark:text-red-400">
-        <BookOpen className="w-6 h-6 text-primary mx-auto mb-4" />
-        <h2 className="text-2xl font-lora font-semibold mb-2">Recommended Articles</h2>
+        <BookOpen className="w-6 h-6 text-blue-600 mx-auto mb-4" />
+        <h2 className="text-2xl font-lora font-semibold mb-2 text-blue-800">Recommended Articles</h2>
         <p>{error}</p>
       </div>
     )
@@ -161,8 +161,8 @@ const FeedSection = () => {
     return (
       <div>
         <div className="flex items-center gap-2 mb-6">
-          <BookOpen className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-lora font-semibold">Recommended Articles</h2>
+          <BookOpen className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-lora font-semibold text-blue-800">Recommended Articles</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -180,8 +180,8 @@ const FeedSection = () => {
   return (
     <div>
       <div className="flex items-center gap-2 mb-6">
-        <BookOpen className="w-6 h-6 text-primary" />
-        <h2 className="text-2xl font-lora font-semibold">Recommended Articles</h2>
+        <BookOpen className="w-6 h-6 text-blue-600" />
+        <h2 className="text-2xl font-lora font-semibold text-blue-800">Recommended Articles</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedFeeds.map((feed, index) => (
@@ -215,7 +215,7 @@ const FeedSection = () => {
                   {feed.source}
                 </span>
               </div>
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-3 group-hover:text-primary">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-3 group-hover:text-blue-600">
                 {feed.title}
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-4">
@@ -230,7 +230,7 @@ const FeedSection = () => {
                   href={feed.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"
+                  className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700"
                 >
                   <span>Read</span>
                   <ArrowRight className="w-3 h-3" />
@@ -245,7 +245,7 @@ const FeedSection = () => {
           <button
             onClick={loadMore}
             disabled={loadingMore}
-            className="btn-primary flex items-center gap-2 px-6 py-3"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium flex items-center gap-2"
           >
             {loadingMore ? (
               <>
