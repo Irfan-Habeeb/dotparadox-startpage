@@ -66,10 +66,57 @@ const QuickLinks = () => {
     localStorage.setItem('quickLinks', JSON.stringify(categories))
   }, [categories])
 
+  // Fetch favicons for existing links that don't have them
+  useEffect(() => {
+    const fetchMissingFavicons = async () => {
+      const updatedCategories = [...categories]
+      let hasChanges = false
+
+      for (let categoryIndex = 0; categoryIndex < updatedCategories.length; categoryIndex++) {
+        const category = updatedCategories[categoryIndex]
+        for (let linkIndex = 0; linkIndex < category.links.length; linkIndex++) {
+          const link = category.links[linkIndex]
+          if (!link.favicon) {
+            const favicon = await getFavicon(link.url)
+            if (favicon) {
+              updatedCategories[categoryIndex].links[linkIndex].favicon = favicon
+              hasChanges = true
+            }
+          }
+        }
+      }
+
+      if (hasChanges) {
+        setCategories(updatedCategories)
+      }
+    }
+
+    fetchMissingFavicons()
+  }, [])
+
   const getFavicon = async (url) => {
     try {
       const domain = new URL(url.startsWith('http') ? url : `https://${url}`).hostname
-      return `https://${domain}/favicon.ico`
+      // Try multiple favicon URLs for better compatibility
+      const faviconUrls = [
+        `https://${domain}/favicon.ico`,
+        `https://${domain}/favicon.png`,
+        `https://www.${domain}/favicon.ico`,
+        `https://www.${domain}/favicon.png`
+      ]
+      
+      // Test if favicon exists
+      for (const faviconUrl of faviconUrls) {
+        try {
+          const response = await fetch(faviconUrl, { method: 'HEAD' })
+          if (response.ok) {
+            return faviconUrl
+          }
+        } catch {
+          continue
+        }
+      }
+      return null
     } catch {
       return null
     }
@@ -156,7 +203,7 @@ const QuickLinks = () => {
                       rel="noopener noreferrer"
                       className="block p-3 bg-white/20 hover:bg-white/30 rounded-lg text-center transition-all"
                     >
-                      <div className="w-8 h-8 mx-auto mb-2">
+                      <div className="w-8 h-8 mx-auto mb-2 flex items-center justify-center">
                         {link.favicon ? (
                           <img 
                             src={link.favicon} 
