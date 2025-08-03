@@ -151,7 +151,7 @@ const FeedSection = () => {
     return (
       <div className="text-center text-red-600 dark:text-red-400">
         <BookOpen className="w-6 h-6 text-white mx-auto mb-4" />
-        <h2 className="text-2xl font-lora font-semibold mb-2 text-white">Recommended Articles</h2>
+        <h2 className="text-2xl font-lora font-semibold mb-2 text-white/95">Recommended Articles</h2>
         <p>{error}</p>
       </div>
     )
@@ -161,8 +161,8 @@ const FeedSection = () => {
     return (
       <div>
         <div className="flex items-center gap-2 mb-6">
-          <BookOpen className="w-6 h-6 text-white" />
-          <h2 className="text-2xl font-lora font-semibold text-white">Recommended Articles</h2>
+          <BookOpen className="w-6 h-6 text-white/90" />
+          <h2 className="text-2xl font-lora font-semibold text-white/95">Recommended Articles</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -180,8 +180,8 @@ const FeedSection = () => {
   return (
     <div>
       <div className="flex items-center gap-2 mb-6">
-        <BookOpen className="w-6 h-6 text-white" />
-        <h2 className="text-2xl font-lora font-semibold text-white">Recommended Articles</h2>
+        <BookOpen className="w-6 h-6 text-white/90" />
+        <h2 className="text-2xl font-lora font-semibold text-white/95">Recommended Articles</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedFeeds.map((feed, index) => (
@@ -245,7 +245,7 @@ const FeedSection = () => {
           <button
             onClick={loadMore}
             disabled={loadingMore}
-            className="px-6 py-3 bg-white hover:bg-gray-100 text-gray-900 rounded-xl font-medium flex items-center gap-2"
+            className="px-6 py-3 bg-white/90 hover:bg-white text-gray-900 rounded-xl font-medium flex items-center gap-2"
           >
             {loadingMore ? (
               <>

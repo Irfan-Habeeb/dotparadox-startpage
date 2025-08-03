@@ -144,10 +144,10 @@ const QuickLinks = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-lora font-semibold text-white text-center">Quick Links</h2>
+        <h2 className="text-2xl font-lora font-semibold text-white/95 text-center">Quick Links</h2>
         <button
           onClick={() => setEditing(!editing)}
-          className="p-2 bg-white/20 hover:bg-white/30 text-white rounded-lg"
+          className="p-2 bg-white/15 hover:bg-white/25 text-white/90 rounded-lg"
         >
           <Edit2 className="w-4 h-4" />
         </button>
@@ -157,10 +157,10 @@ const QuickLinks = () => {
         {categories.map((category, categoryIndex) => {
           const CategoryIconComponent = iconMap[category.icon]
           return (
-            <div key={category.name} className="card p-4">
+                                <div key={category.name} className="bg-white/10 dark:bg-gray-800/10 rounded-xl border border-white/20 dark:border-gray-700/20 p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <CategoryIconComponent className="w-5 h-5 text-white" />
+                                          <CategoryIconComponent className="w-5 h-5 text-white/90" />
                   {editingCategory === categoryIndex ? (
                     <div className="flex items-center gap-2">
                       <input
@@ -192,7 +192,7 @@ const QuickLinks = () => {
                       </button>
                     </div>
                   ) : (
-                    <h3 className="font-medium text-white">{category.name}</h3>
+                    <h3 className="font-medium text-white/90">{category.name}</h3>
                   )}
                 </div>
                 {editing && (
@@ -224,12 +224,12 @@ const QuickLinks = () => {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block p-3 bg-white/20 hover:bg-white/30 rounded-lg text-center transition-all"
+                        className="block p-3 bg-white/15 hover:bg-white/25 rounded-lg text-center"
                       >
                         <div className="w-8 h-8 mx-auto mb-2 flex items-center justify-center">
-                          <LinkIconComponent className="w-full h-full text-white" />
+                          <LinkIconComponent className="w-full h-full text-white/90" />
                         </div>
-                        <span className="text-xs text-white font-medium">{link.name}</span>
+                        <span className="text-xs text-white/90 font-medium">{link.name}</span>
                       </a>
                       {editing && (
                         <button
@@ -285,10 +285,10 @@ const QuickLinks = () => {
         })}
         
         {editing && (
-          <div className="card p-4 border-dashed border-2 border-white/30">
+          <div className="bg-white/10 dark:bg-gray-800/10 rounded-xl border-2 border-dashed border-white/20 dark:border-gray-700/20 p-4">
             <button
               onClick={addCategory}
-              className="w-full h-full flex flex-col items-center justify-center text-white/70 hover:text-white"
+              className="w-full h-full flex flex-col items-center justify-center text-white/70 hover:text-white/90"
             >
               <Plus className="w-8 h-8 mb-2" />
               <span className="text-sm">Add Category</span>

@@ -33,7 +33,7 @@
   }
   
   .card {
-    @apply bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-xl border border-white/30 dark:border-gray-700/30;
+    @apply bg-white/70 dark:bg-gray-800/70 rounded-xl shadow-xl border border-white/20 dark:border-gray-700/20;
   }
   
   .search-input {
@@ -49,6 +49,6 @@
   }
   
   .feed-card {
-    @apply bg-white/80 dark:bg-gray-800/80 rounded-xl border border-white/30 dark:border-gray-700/30 hover:bg-white/90 dark:hover:bg-gray-800/90;
+    @apply bg-white/70 dark:bg-gray-800/70 rounded-xl border border-white/20 dark:border-gray-700/20 hover:bg-white/80 dark:hover:bg-gray-800/80;
   }
 }
