@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { ExternalLink, Calendar, BookOpen, Loader2, ArrowRight } from 'lucide-react'
 
 const FeedSection = () => {
@@ -9,7 +9,7 @@ const FeedSection = () => {
   const [allFeeds, setAllFeeds] = useState([])
   const [error, setError] = useState(null)
 
-  const getSourceName = (url) => {
+  const getSourceName = useCallback((url) => {
     const sourceMap = {
       'bbci.co.uk': 'BBC News',
       'cnn.com': 'CNN',
@@ -36,9 +36,9 @@ const FeedSection = () => {
       if (url.includes(key)) return value
     }
     return 'Unknown Source'
-  }
+  }, [])
 
-  const getCategory = (url) => {
+  const getCategory = useCallback((url) => {
     if (url.includes('bbci.co.uk') || url.includes('cnn.com') || url.includes('npr.org') || url.includes('reuters.com')) return 'news'
     if (url.includes('TechCrunch') || url.includes('wired.com') || url.includes('arstechnica.com')) return 'tech'
     if (url.includes('poetryfoundation.org') || url.includes('theparisreview.org') || url.includes('newyorker.com') || url.includes('theatlantic.com') || url.includes('lrb.co.uk')) return 'literature'
@@ -47,9 +47,9 @@ const FeedSection = () => {
     if (url.includes('artsjournal') || url.includes('artsy.net')) return 'arts'
     if (url.includes('aeon.co') || url.includes('brainpickings.org')) return 'philosophy'
     return 'general'
-  }
+  }, [])
 
-  const getCategoryColor = (category) => {
+  const getCategoryColor = useCallback((category) => {
     const colors = {
       news: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
       tech: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
@@ -61,13 +61,12 @@ const FeedSection = () => {
       general: 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
     }
     return colors[category] || colors.general
-  }
+  }, [])
 
   useEffect(() => {
     const fetchFeeds = async () => {
       try {
         const proxyUrl = 'https://api.allorigins.win/raw?url='
-        // Reduced number of feeds for better performance
         const feedUrls = [
           'https://feeds.bbci.co.uk/news/rss.xml',
           'https://rss.cnn.com/rss/edition.rss',
@@ -85,7 +84,7 @@ const FeedSection = () => {
         const feedPromises = feedUrls.map(async (url, index) => {
           try {
             const controller = new AbortController()
-            const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 5000)
             
             const response = await fetch(proxyUrl + encodeURIComponent(url), {
               signal: controller.signal
@@ -99,7 +98,7 @@ const FeedSection = () => {
             const articles = []
             
             items.forEach((item, itemIndex) => {
-              if (itemIndex < 3) { // Reduced from 4 to 3 articles per feed
+              if (itemIndex < 3) {
                 const title = item.querySelector('title')?.textContent || 'Untitled'
                 const link = item.querySelector('link')?.textContent || '#'
                 const description = item.querySelector('description')?.textContent || item.querySelector('content\\:encoded')?.textContent || 'No description available'
@@ -135,16 +134,18 @@ const FeedSection = () => {
       }
     }
     fetchFeeds()
-  }, [])
+  }, [displayCount, getSourceName, getCategory])
 
-  const loadMore = async () => {
+  const loadMore = useCallback(async () => {
     setLoadingMore(true)
-    await new Promise(resolve => setTimeout(resolve, 300)) // Reduced delay
+    await new Promise(resolve => setTimeout(resolve, 300))
     const newCount = displayCount + 6
     setDisplayCount(newCount)
     setFeeds(allFeeds.slice(0, newCount))
     setLoadingMore(false)
-  }
+  }, [displayCount, allFeeds])
+
+  const displayedFeeds = useMemo(() => feeds.slice(0, displayCount), [feeds, displayCount])
 
   if (error) {
     return (
@@ -183,7 +184,7 @@ const FeedSection = () => {
         <h2 className="text-2xl font-linertinas">Recommended Articles</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {feeds.map((feed, index) => (
+        {displayedFeeds.map((feed, index) => (
           <div key={index} className="group feed-card">
             {feed.image && (
               <div className="relative overflow-hidden rounded-t-xl">
@@ -198,7 +199,7 @@ const FeedSection = () => {
                     {feed.category}
                   </span>
                 </div>
-                <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
+                <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
                   {feed.source}
                 </div>
               </div>

@@ -14,7 +14,7 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #0f172a;
+    background: #1e3a8a;
   }
 
   * {
@@ -27,24 +27,6 @@
     position: relative;
     min-height: 100vh;
     background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 25%, #60a5fa 50%, #93c5fd 75%, #dbeafe 100%);
-    background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1500&q=80');
-    background-size: cover;
-    background-position: center;
-  }
-
-  .blur-bg::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: inherit;
-    background-size: cover;
-    background-position: center;
-    filter: blur(20px);
-    transform: scale(1.05);
-    z-index: -2;
   }
 
   .blur-bg::after {
@@ -54,16 +36,16 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.7) 0%, rgba(59, 130, 246, 0.5) 100%);
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(59, 130, 246, 0.2) 100%);
     z-index: -1;
   }
   
   .card {
-    @apply bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl shadow-xl border border-white/30 dark:border-gray-700/30;
+    @apply bg-white/60 dark:bg-gray-800/60 rounded-xl shadow-xl border border-white/30 dark:border-gray-700/30;
   }
   
   .search-input {
-    @apply w-full px-4 py-3 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl border border-white/40 dark:border-gray-700/40 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400;
+    @apply w-full px-4 py-3 bg-white/70 dark:bg-gray-800/70 rounded-xl border border-white/40 dark:border-gray-700/40 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400;
   }
   
   .btn-primary {
@@ -71,10 +53,10 @@
   }
   
   .link-tile {
-    @apply p-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-white/30 dark:border-gray-700/30 hover:bg-white/60 dark:hover:bg-gray-800/60 cursor-pointer;
+    @apply p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-white/30 dark:border-gray-700/30 hover:bg-white/70 dark:hover:bg-gray-800/70 cursor-pointer;
   }
   
   .feed-card {
-    @apply bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-white/30 dark:border-gray-700/30 hover:bg-white/60 dark:hover:bg-gray-800/60;
+    @apply bg-white/60 dark:bg-gray-800/60 rounded-xl border border-white/30 dark:border-gray-700/30 hover:bg-white/70 dark:hover:bg-gray-800/70;
   }
 }
