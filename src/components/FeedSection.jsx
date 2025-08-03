@@ -149,7 +149,7 @@ const FeedSection = () => {
 
   if (error) {
     return (
-      <div className="card p-6 text-center text-red-600 dark:text-red-400">
+      <div className="text-center text-red-600 dark:text-red-400">
         <BookOpen className="w-6 h-6 text-primary mx-auto mb-4" />
         <h2 className="text-2xl font-lora font-semibold mb-2">Recommended Articles</h2>
         <p>{error}</p>
@@ -159,7 +159,7 @@ const FeedSection = () => {
 
   if (loading) {
     return (
-      <div className="card p-6">
+      <div>
         <div className="flex items-center gap-2 mb-6">
           <BookOpen className="w-6 h-6 text-primary" />
           <h2 className="text-2xl font-lora font-semibold">Recommended Articles</h2>
@@ -178,7 +178,7 @@ const FeedSection = () => {
   }
 
   return (
-    <div className="card p-6">
+    <div>
       <div className="flex items-center gap-2 mb-6">
         <BookOpen className="w-6 h-6 text-primary" />
         <h2 className="text-2xl font-lora font-semibold">Recommended Articles</h2>
